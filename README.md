@@ -172,7 +172,7 @@ Host: weather-server.local
 
 ### Printed Circuit Board
 
-Example coming soon
+Following PCB was made with [EasyEDA](https://easyeda.com/).
 
 ![PCB Example](docs/pcb-3d.png)
 ![PCB Top](docs/pcb-top.png)
