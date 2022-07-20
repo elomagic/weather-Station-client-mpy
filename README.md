@@ -56,9 +56,9 @@ tbd.
 Before you can start by configuring your bot, you have to upload the firmware. Recommendation is, that Micropython is
 successful running on your ESP.
 
-TODO Install "ampy"
+(TODO) Install "ampy"
 
-Upload the firmware with the following command
+Upload the projects files with the following command
 
 * ```ampy --port COM6 --baud 115200 put ./src /```
 
@@ -104,7 +104,7 @@ The weather bot support two configuration options.
 
 3. Via Web UI of the weather bot
     * Power on ESP
-    * Connect the ESP via Wifi. Look for the SSID "Weather-Bot". Password is "weather-bot".
+    * Connect the ESP via Wi-Fi. Look for the SSID "Weather-Bot". Password is "weather-bot".
     * The configuration page appears. Configure the bot according to your needs.
 
 ## LED Codes
