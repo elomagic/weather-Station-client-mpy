@@ -1,5 +1,14 @@
 # DIY Weather Bot
 
+---
+
+[![GitHub tag](https://img.shields.io/github/tag/elomagic/weather-station-client-mpy.svg)](https://github.com/elomagic/weather-station-client-mpy/tags/)
+[![GitHub issues](https://img.shields.io/github/issues-raw/elomagic/weather-station-client-mpy)](https://github.com/elomagic/spps-py/issues)
+[![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0-standalone.html)
+[![made-with-micropython](https://img.shields.io/badge/Made%20with-MicroPython-1f425f.svg)](https://www.micropython.org/)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/elomagic/weather-station-client-mpy/graphs/commit-activity)
+[![Buymeacoffee](https://badgen.net/badge/icon/buymeacoffee?icon=buymeacoffee&label)](https://www.buymeacoffee.com/elomagic)
+
 ## Table of Contents
 
 - [What about?](#what-about?)
@@ -31,7 +40,7 @@ Cheapest and simplest solution. The client will be powered by an external USB po
 
 #### Component list
 
-* ESP8266 with at least 2MB flash memory and installed Micropython image
+* ESP8266 with at least 2MB flash memory and installed MicroPython image
   (2MiB+ flash version > https://micropython.org/download/?port=esp8266)
 * BMP280 (w/o humidity sensor) or BME (with humidity sensor)
 
@@ -53,7 +62,7 @@ tbd.
   
 ## Prepare Hardware
 
-Before you can start by configuring your bot, you have to upload the firmware. Recommendation is, that Micropython is
+Before you can start by configuring your bot, you have to upload the firmware. Recommendation is, that MicroPython is
 successful running on your ESP.
 
 (TODO) Install "ampy"
