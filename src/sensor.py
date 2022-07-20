@@ -39,7 +39,7 @@ class Sensor:
 
         return {
             'temperature': 20 + getrandbits(3),
-            'temperatureUnit': 'C',
+            'temperatureUnit': '°C',
             "pressure": 998 + getrandbits(5),
             'pressureUnit': 'hPa',
             'humidity': 50 + getrandbits(5),
