@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Weather Bot - Configuration">
+    <title>Weather Bot - Configuration</title>
+
+    <!-- TODO Replace link by using offline content -->
+    <!--<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">-->
+    <!--<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">-->
+
+    <link type="image/png" sizes="16x16" rel="icon" href="favicon-16.png">
+    <link type="image/png" sizes="32x32" rel="icon" href="favicon-32.png">
+    <link type="image/png" sizes="96x96" rel="icon" href="favicon-96.png">
+    <meta name="msapplication-square70x70logo" content="icons8-roboter-2-70.png">
+    <meta name="msapplication-TileColor" content="#C0FFEE">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="testbox">
+    <div></div>
+    <form action="/submit-configuration.do" method="post" enctype="application/x-www-form-urlencoded">
+        <div class="banner">
+            <div style="position: absolute; background-color: rgba(229,250,75,0.47); width: 100%; height: 100%; "></div>
+            <h1>Weather Bot - Configuration</h1>
+        </div>
+
+        <div></div>
+        <div class="edit-box">
+            <p class="t-c" >
+                {submit-result-text}
+            </p>
+
+            <h3>Sensor</h3>
+            <div class="item">
+                <label for="uid">UID (UUID Pattern)</label>
+                <input type="text" id="uid" name="uid" value="{uid}" pattern="^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$">
+            </div>
+            <div class="item">
+                <label for="measure-interval">Measure Interval (In Seconds)</label>
+                <input type="number" id="measure-interval" name="measure-interval" value="{measure-interval}" step="60" min="60" max="100000">
+            </div>
+            <!--
+            <div class="item">
+                <label for="geo">GEO Location</label>
+                <input type="number" id="geo" name="geo" pattern="[0-9]+" value="{geo}">
+            </div>
+            -->
+
+            <h3>Wifi</h3>
+            <div class="item">
+                <label for="ssid">SSID</label>
+                <input type="text" id="ssid" name="ssid" value="{ssid}" list="available-access-points">
+                <datalist id="available-access-points">
+                    {access-points}
+                </datalist>
+            </div>
+            <div class="item">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" value="{password}">
+            </div>
+            <div class="item">
+                <label for="address">IP Address (IPv4)</label>
+                <input type="text" id="address" name="address" value="{address}" pattern="(^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$)|^$">
+            </div>
+            <div class="item">
+                <label for="netmask">Netmask (IPv4)</label>
+                <input type="text" id="netmask" name="netmask" value="{netmask}" pattern="(^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$)|^$">
+            </div>
+            <div class="item">
+                <label for="gateway">Gateway (IPv4)</label>
+                <input type="text" id="gateway" name="gateway" value="{gateway}" pattern="(^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$)|^$">
+            </div>
+            <div class="item">
+                <label for="dns">DNS (IPv4)</label>
+                <input type="text" id="dns" name="dns" value="{dns}" pattern="(^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$)|^$">
+            </div>
+            <div class="item">
+                <label for="wcn">Wifi Client Name</label>
+                <input type="text" id="wcn" name="wcn" value="{wcn}" maxlength="32">
+            </div>
+
+            <h3>Server</h3>
+            <div class="item">
+                <label for="server-url">Server URL</label>
+                <input type="url" id="server-url" name="server-url" value="{server-url}">
+            </div>
+            <div class="item">
+                <label for="api-key">API Key</label>
+                <input type="password" id="api-key" name="api-key" value="{api-key}">
+            </div>
+
+            <h3>Logging</h3>
+            <div class="item">
+                <label for="debug-level">Level</label>
+                <select id="debug-level" name="debug-level">
+                    <option value="debug" {level-debug}>DEBUG</option>
+                    <option value="info" {level-info}>INFO</option>
+                    <option value="warn" {level-warn}>WARN</option>
+                    <option value="error" {level-error}>ERROR</option>
+                </select>
+            </div>
+
+            <div class="btn-block">
+                <button type="submit" class="button">Save</button>
+            </div>
+
+            <p class="t-c" >
+                <a href="/get-log-file.do">Download log file</a>
+            </p>
+            <p class="t-c" >
+                Weather Bot Version {app-ver}
+            </p>
+            <p class="t-c" >
+                Project Homepage: <a href="https://bitbucket.org/crambow/weather-station-py/">https://bitbucket.org/crambow/weather-station-py/src/master/</a>
+            </p>
+        </div>
+
+    </form>
+    <div></div>
+
+</div>
+
+</body>
+</html>
