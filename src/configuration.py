@@ -106,4 +106,4 @@ def print_config():
 
     log.info('Current configuration in use:')
     for key, value in __CONFIG.items():
-        log.info("{}={}\n".format(key, value))
+        log.info("{}={}".format(key, value))
