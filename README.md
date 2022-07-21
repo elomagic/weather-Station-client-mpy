@@ -104,6 +104,9 @@ The weather bot support two configuration options.
     server.url=http://[HOSTNAME]/rest
     # Application key to authentication
     server.appKey=
+   
+    # Debug level
+    logging.level=debug
     ```
 
     **Command to write configuration to ESP**
