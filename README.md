@@ -86,27 +86,31 @@ The weather bot support two configuration options.
     wifi.password=changeit
     # IP address of this client when access point doesn't provide dynamically IP address. Usually empty
     wifi.address=
-    # Usually empty
+    # Usually empty (By default 255.255.255.0)
     wifi.netmask=255.255.255.0
     # Usually empty
     wifi.gateway=
-    # Usually empty
+    # Usually empty (By default 8.8.8.8)
     wifi.dns=8.8.8.8
-    # Name of client bot
+    # Name of client bot (By default 'Weather-Bot')
     wifi.clientName=[BOT_NAME]
     
     # Unique identifier of this client ( Looking for a generator. See https://www.uuidgenerator.net/version4 )
     sensor.uid=uuid
-    # Measure interval in seconds
-    sensor.measureInterval=60
+    # Measure interval in seconds (By default 300 seconds)
+    sensor.measureInterval=300
     
     # URL server address. Sample "http://192.168.150.2/rest" 
     server.url=http://[HOSTNAME]/rest
     # Application key to authentication
     server.appKey=
    
-    # Debug level
+    # Debug level  (By default debug)
     logging.level=debug
+    # Controls logging output to the console (By default enabled, 1 = Enabled, 0 = Disabled)
+    logging.console.enabled=1
+    # Controls logging output to file on the ESP (By default disabled, 1 = Enabled, 0 = Disabled)
+    logging.file.enabled=0
     ```
 
     **Command to write configuration to ESP**
@@ -153,17 +157,17 @@ Host: weather-server.local
     // UNIX epoch timestamp of the measurement in seconds 
     "unixEpochTimestamp": "1656914554",
     // Measured temperature 
-    "temperature":  "31.52",
+    "temperature": "31.52",
     // Unit of the measured temperature 
-    "temperatureUnit":  "C",
+    "temperatureUnit": "°C",
     // Measured pressure
     "pressure": "999.49",
     // Unit of the measured pressure
-    "pressureUnit":  "hPA",
-    // Measured  humidity in percent
-    "humidity":  "33.8064",
-    // Battery voltage
-    "batteryVoltage":  "3.3"
+    "pressureUnit": "hPA",
+    // Measured humidity in percent
+    "humidity": "33.8064",
+    // Battery voltage (Unit must be 'V')
+    "batteryVoltage": "3.3"
 }
 ```
 
