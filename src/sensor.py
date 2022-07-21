@@ -57,7 +57,7 @@ class Sensor:
 
         return {
             'temperature': t,
-            'temperatureUnit': 'C',
+            'temperatureUnit': '°C',
             # "pressure": "{}.{:02d}".format(pi, pd),
             'pressureUnit': 'hPa',
             'humidity': h
@@ -78,10 +78,10 @@ class Sensor:
 
         result = {
             'temperature': "{}".format(t / 100),
-            'temperatureUnit': 'C',
+            'temperatureUnit': '°C',
             'pressure': "{}.{:02d}".format(pi, pd),
             'pressureUnit': 'hPa',
-            'humidity': h
+            'humidity': h / 100
             # "heatIndex":  = currentSensorData.heatIndex;
             # "heatIndexUnit":  = currentSensorData.heatIndexUnit;
             # "altitude":  = currentSensorData.altitude;
