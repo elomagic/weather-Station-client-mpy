@@ -138,6 +138,7 @@ Please ignore the very short flash when counting. Each flash is min. half a seco
 |   4   | Unable to post data to server      |
 |   5   | Unable to connect NTP server       |
 |   6   | Unexpected error                   |
+|   7   | HTTP authentication failed         |
 
 ## Weather Client Data Model
 
@@ -199,5 +200,6 @@ Proposal of a device case. Made with [Blender](https://www.blender.org).
 
 ## Outlook - Possible further ideas
 
-* MQTT support
-* TLS fixed (This will be very difficult to impossible. TLS needs a lot of memory and the ESP8266 has not enough of it.)
+* [MQTT](https://mqtt.org/) support()
+* TLS support (This will be very difficult to impossible. TLS needs a lot of memory and the ESP8266 has not enough of it.)
+* [Node-RED](https://nodered.org/) support

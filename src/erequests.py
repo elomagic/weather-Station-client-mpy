@@ -39,6 +39,8 @@ class Response:
 def __request(method: str, url: str, json=None) -> Response:
     import ussl
     import configuration as c
+    from exceptions import AuthenticationFailed
+
     redir_cnt = 1
 
     while True:
@@ -123,6 +125,9 @@ def __request(method: str, url: str, json=None) -> Response:
             break
 
     log.debug("Responses HTTP code {}, reason={}".format(status, reason))
+
+    if status == 401:
+        raise AuthenticationFailed()
 
     resp = Response(s)
     resp.status_code = status

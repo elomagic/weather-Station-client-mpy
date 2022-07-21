@@ -18,3 +18,8 @@ class UnableToPostError(BaseError):
 class ReadNtpError(BaseError):
     message = 'Failed.'
     flashCount = 5
+
+
+class AuthenticationFailed(BaseError):
+    message = 'HTTP authentication failed (HTTP status 401)'
+    flashCount = 7
