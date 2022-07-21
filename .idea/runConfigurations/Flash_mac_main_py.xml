@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Flash mac main.py" type="MicroPythonConfigurationType" factoryName="MicroPython" path="$PROJECT_DIR$/src/main.py">
+    <module name="weather-station-py" />
+    <method v="2" />
+  </configuration>
+</component>
