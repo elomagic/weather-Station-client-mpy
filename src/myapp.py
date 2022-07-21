@@ -64,7 +64,6 @@ def measure_and_send():
         url = "{}/measure".format(c.get_value(c.SERVER_URL))
 
         # Release unused memory
-        c.reset()
         gc.collect()
 
         client.post_weather_data(url, current_sensor_data)

@@ -1,9 +1,7 @@
 # https://bitbucket.org/thesheep/micropython-si7021/overview
 
-from micropython import const
 import ustruct
-import sys
-
+from micropython import const
 
 _HUMID_NOHOLD = const(0xf5)
 _TEMP_NOHOLD = const(0xf3)
@@ -51,7 +49,7 @@ class SI7021:
         self.reset()
         # Make sure the USER1 settings are correct.
         while True:
-            # While restarting, the sensor doesn't respond to reads or writes.
+            # While restarting, the sensor doesn't respond to read's or writes.
             try:
                 value = self.i2c.readfrom_mem(self.address, _READ_USER1, 1)[0]
             except OSError as e:
@@ -74,10 +72,10 @@ class SI7021:
             try:
                 self.i2c.readfrom_into(self.address, data)
             except OSError as e:
-                if e.args[0] != 19: # errno 19 ENODEV
+                if e.args[0] != 19:  # errno 19 ENODEV
                     raise
             else:
-                if data[0] != 0xff: # Check if read succeeded.
+                if data[0] != 0xff:  # Check if read succeeded.
                     break
         value, checksum = ustruct.unpack('>HB', data)
         if checksum != _crc(data[:2]):
