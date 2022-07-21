@@ -3,7 +3,7 @@
 ---
 
 [![GitHub tag](https://img.shields.io/github/tag/elomagic/weather-station-client-mpy.svg)](https://github.com/elomagic/weather-station-client-mpy/tags/)
-[![GitHub issues](https://img.shields.io/github/issues-raw/elomagic/weather-station-client-mpy)](https://github.com/elomagic/spps-py/issues)
+[![GitHub issues](https://img.shields.io/github/issues-raw/elomagic/weather-station-client-mpy)](https://github.com/elomagic/weather-station-client-mpy/issues)
 [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0-standalone.html)
 [![made-with-micropython](https://img.shields.io/badge/Made%20with-MicroPython-1f425f.svg)](https://www.micropython.org/)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/elomagic/weather-station-client-mpy/graphs/commit-activity)
