@@ -82,14 +82,15 @@ def __request(method: str, url: str, json=None) -> Response:
             s.write(b"Host: %s\r\n" % host)
             s.write(b"Weather-Client-API-Key: %s\r\n" % c.get_value(c.SERVER_APP_KEY))
 
+            data = bytes(json, 'utf-8')
             if json:
                 s.write(b'Content-Type: application/json; charset=UTF-8\r\n')
-                s.write(b"Content-Length: %d\r\n" % len(json))
+                s.write(b"Content-Length: %d\r\n" % len(data))
 
             s.write(b"Connection: close\r\n\r\n")
 
             if json:
-                s.write(json)
+                s.write(data)
 
             line = s.readline()
             # print(line)
