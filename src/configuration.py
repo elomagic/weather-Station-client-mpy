@@ -21,13 +21,13 @@ FILENAME = 'configuration'
 
 __DEFAULT_VALUES = {
     LOGGING_LEVEL: 'debug',
-    LOGGING_CONSOLE_ENABLED: 'true',
-    LOGGING_FILE_ENABLED: 'false',
+    LOGGING_CONSOLE_ENABLED: '1',
+    LOGGING_FILE_ENABLED: '0',
 
     SENSOR_UID: '00000000-0000-0000-0000-000000000000',
     SENSOR_MEASURE_INTERVAL: '300',
 
-    SERVER_URL: 'http://weather-api.elomagic.org/rest/measure',
+    SERVER_URL: 'http://weather-api.elomagic.org/rest',
     SERVER_APP_KEY: '',
 
     WIFI_SSID: '',
@@ -47,20 +47,20 @@ def reset():
     __CONFIG = {}
 
 
-def get_value(path: str) -> str:
+def get_value(key: str) -> str:
     global __CONFIG
 
-    if path in __CONFIG:
-        return __CONFIG[path]
+    if key in __CONFIG:
+        return __CONFIG[key]
 
-    return __DEFAULT_VALUES[path]
+    return __DEFAULT_VALUES[key]
 
 
-def set_value(path: str, value: str):
+def set_value(key: str, value: str):
     global __CONFIG
     import logging as log
-    log.debug("Setting '{}' with value '{}'".format(path, value))
-    __CONFIG[path] = value
+    log.debug("Setting '{}' with value '{}'".format(key, value))
+    __CONFIG[key] = value
 
 
 def load() -> bool:
@@ -80,8 +80,8 @@ def load() -> bool:
         log.debug("Configuration file '{}' successful loaded".format(FILENAME))
 
         log.setup(
-            get_value(LOGGING_CONSOLE_ENABLED) == 'true',
-            get_value(LOGGING_FILE_ENABLED) == 'true',
+            get_value(LOGGING_CONSOLE_ENABLED) == '1',
+            get_value(LOGGING_FILE_ENABLED) == '1',
             get_value(LOGGING_LEVEL)
         )
 
@@ -98,3 +98,12 @@ def write():
         for key, value in __CONFIG.items():
             log.debug("Writing key '{}' with value '{}...'".format(key, value[:2]))
             f.write("{}={}\n".format(key, value))
+
+
+def print_config():
+    import logging as log
+    global __CONFIG
+
+    log.info('Current configuration in use:')
+    for key, value in __CONFIG.items():
+        log.info("{}={}\n".format(key, value))
