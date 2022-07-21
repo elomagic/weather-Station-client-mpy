@@ -15,7 +15,8 @@ WIFI_GATEWAY = 'wifi.gateway'
 WIFI_DNS = 'wifi.dns'
 WIFI_CLIENT_NAME = 'wifi.clientName'
 
-APP_VER = '1.0'
+APP_VER = '1.0.0'
+APP_API_VER = '1.0.0'
 
 FILENAME = 'configuration'
 
