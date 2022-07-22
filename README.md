@@ -192,6 +192,7 @@ Following PCB was made with [EasyEDA](https://easyeda.com/).
 Proposal of a device case. Made with [Blender](https://www.blender.org).
 
 ![Case Proposal](docs/case.png)
+![Case Proposal Printed](docs/case-bottom-printed.png)
 
 
 ## Known Issues
