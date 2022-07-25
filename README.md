@@ -100,7 +100,7 @@ The weather bot support two configuration options.
     # Measure interval in seconds (By default 300 seconds)
     sensor.measureInterval=300
     
-    # URL server address. Sample "http://192.168.150.2/rest" 
+    # REST or MQTT URL server address.  Sample "http://192.168.150.2/rest" or "mqtt://192.168.150.2/kitchen"       
     server.url=http://[HOSTNAME]/rest
     # Application key to authentication
     server.appKey=
@@ -201,6 +201,4 @@ Proposal of a device case. Made with [Blender](https://www.blender.org).
 
 ## Outlook - Possible further ideas
 
-* [MQTT](https://mqtt.org/) support()
 * TLS support (This will be very difficult to impossible. TLS needs a lot of memory and the ESP8266 has not enough of it.)
-* [Node-RED](https://nodered.org/) support

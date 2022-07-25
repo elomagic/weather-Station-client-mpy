@@ -1,7 +1,33 @@
 # client.py - HTTP client module to post data to server
 
+def publish_property(client, topic_prefix: str, key: str, data: dict):
+    if data.get(key) is None:
+        return
 
-def post_weather_data(url: str, data):
+    value = data[key]
+
+    client.publish("{}/{}".format(topic_prefix, "temperature"), value)
+
+
+def send_via_mqtt(url: str, data: dict):
+    from umqttsimple import MQTTClient
+    import configuration as c
+    import logging as log
+
+    # Client-Instanz erzeugen
+    proto, dummy, host, topic_prefix = url.split("/", 3)
+    log.debug("Connecting to " + host)
+    client = MQTTClient(c.get_value(c.SERVER_APP_KEY), host)
+    client.connect()
+    log.debug("Connected to " + host)
+
+    publish_property(client, topic_prefix, "temperature", data)
+    publish_property(client, topic_prefix, "pressure", data)
+    publish_property(client, topic_prefix, "humidity", data)
+    publish_property(client, topic_prefix, "batteryVoltage", data)
+
+
+def post_via_rest(url: str, data: dict):
     import ujson
     from wifi import wlan
     import erequests as requests
@@ -24,3 +50,12 @@ def post_weather_data(url: str, data):
         # log.warn("Responses payload {}".format(text))
 
         raise UnableToPostError
+
+
+def post_weather_data(url: str, data: dict):
+    if url.startswith('http:'):
+        post_via_rest(url, data)
+    elif url.startswith('mqtt:'):
+        send_via_mqtt(url, data)
+    else:
+        raise ValueError("Unsupported scheme in URL '%s'" % url)
