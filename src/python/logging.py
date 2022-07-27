@@ -1,7 +1,7 @@
 
 from micropython import const
 
-__FILENAME: str = "logs/weather-{}.log"
+__FILENAME: str = "python/logs/weather-{}.log"
 __MAX_ROLLOVER_FILES: int = const(2)
 __MAX_LOG_FILE_SIZE = const(1024 * 16)
 

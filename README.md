@@ -69,7 +69,7 @@ successful running on your ESP.
 
 Upload the projects files with the following command
 
-* ```ampy --port COM6 --baud 115200 put ./src /```
+* ```ampy --port COM6 --baud 115200 put ./src/python /```
 
 ## Configure Bot
 
@@ -142,15 +142,19 @@ Please ignore the very short flash when counting. Each flash is min. half a seco
 
 ## Weather Client Data Model
 
-The following example shows which data is transmitted:
+The weather-bot support two communications protocols.
 
-### HTTP Command
+### HTTP communication
+
+The following examples shows which data is transmitted:
+
+#### HTTP Command
 ```http request
 POST /rest/measure HTTP/1.1
 Host: weather-server.local
 ```
 
-### Payload
+#### Payload
 ```json5
 {
     // UID of the measure sensor
@@ -172,7 +176,21 @@ Host: weather-server.local
 }
 ```
 
-## Hardware Example
+### MQTT communication
+
+Topic generation rule: ```/[Path of the URL]/[Property Name]```
+
+Examples:
+* ```kitchen/temperature```
+* ```garden/humidity```
+
+
+#### Published measures
+
+* "temperature" - Measured temperature in celsius grad (°C) 
+* "pressure" - Measured pressures in hecto pascal (hPa)
+* "humidity" - Measured humidity in percent
+* "batteryVoltage" - Measured battery voltage in voltage (V) 
 
 ### Circuit diagram
 

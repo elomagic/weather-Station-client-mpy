@@ -1,6 +1,5 @@
 # etime.py - Tooling around NTP and time
 
-import configuration as c
 import logging as log
 
 

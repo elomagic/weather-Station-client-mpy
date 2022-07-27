@@ -282,4 +282,4 @@ cython_debug/
 
 weather-client-configuration.json
 /configuration.properties
-/weather-station-py.iml
+/*.iml

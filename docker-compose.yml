@@ -10,9 +10,8 @@ services:
       - "41883:1883"
       - "49001:9001"
     volumes:
-      - "D:/projects/docker-mosquitto:/mosquitto"
-      # - "D:/projects/docker-mosquitto/conf/mosquitto.conf:/mosquitto/config/mosquitto.conf"
-      # - "D:/projects/docker-mosquitto/data:/mosquitto/data"
-      # - "D:/projects/docker-mosquitto/log:/mosquitto/log"
+      - "${WORKING_DIR:-.}/src/docker:/mosquitto/config:RO"
+      - "${WORKING_DIR:-.}/target/docker-mosquitto/data:/mosquitto/data"
+      - "${WORKING_DIR:-.}/target/docker-mosquitto/log:/mosquitto/log"
     stdin_open: true
     tty: true

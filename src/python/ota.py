@@ -9,7 +9,7 @@ import logging as log
 import wifi
 import configuration as c
 
-UPDATE_PATH = '/update'
+UPDATE_PATH = 'update'
 
 
 def url_encode(data: str) -> str:
