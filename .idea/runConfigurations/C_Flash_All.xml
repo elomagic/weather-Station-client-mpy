@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="C Flash All" type="MicroPythonConfigurationType" factoryName="MicroPython" path=".\src\python">
+  <configuration default="false" name="C Flash All" type="MicroPythonConfigurationType" factoryName="MicroPython" path="$PROJECT_DIR$\src\python">
     <module name="weather-station-py" />
     <method v="2">
       <option name="Make" enabled="true" />

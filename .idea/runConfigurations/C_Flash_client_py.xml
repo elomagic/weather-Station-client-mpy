@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="C Flash client.py" type="MicroPythonConfigurationType" factoryName="MicroPython" path="C:\projects\elomagic\weather-station-py\src\client.py">
+  <configuration default="false" name="C Flash client.py" type="MicroPythonConfigurationType" factoryName="MicroPython" path=".\src\python\client.py">
     <module name="weather-station-py" />
     <method v="2" />
   </configuration>
