@@ -1,4 +1,5 @@
 import client
+import wifi
 
 
 def test_post_weather_data():
@@ -9,3 +10,9 @@ def test_post_weather_data():
     }
 
     client.post_weather_data("localhost:41883", data)
+
+
+def test():
+    wifi.start_client()
+
+    test_post_weather_data()
