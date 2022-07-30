@@ -4,12 +4,12 @@ import os
 import sys
 
 
-def contains_option(args, option):
+def contains_option(args: [], option: str):
     """Returns true when option in list of args. Otherwise false"""
     return option in args
 
 
-def get_value_of_option(args, option, default_value=None):
+def get_value_of_option(args: [], option: str, default_value=None) -> str:
     """Returns value of option when in list of args. Otherwise default value. By default, default value is None."""
     if not contains_option(args, option):
         return default_value
@@ -71,8 +71,8 @@ if contains_option(sys.argv, '--help'):
 else:
     port = get_value_of_option(sys.argv, '--port', get_value_of_option(sys.argv, '-p', 'COM7'))
     baud = get_value_of_option(sys.argv, '--baud', get_value_of_option(sys.argv, '-b', '115200'))
-    sourceFile = get_value_of_option(sys.argv, '--file', get_value_of_option(sys.argv, '-f', 'weather-client'
-                                                                                             'configuration.properties'))
+    sourceFile = get_value_of_option(sys.argv, '--file', get_value_of_option(sys.argv, '-f', 'weather-client-'
+                                                                                             'configuration.json'))
     reset = contains_option(sys.argv, '--reset')
 
     command = sys.argv[1]
