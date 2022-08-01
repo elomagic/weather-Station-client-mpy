@@ -71,20 +71,25 @@ if contains_option(sys.argv, '--help'):
 else:
     port = get_value_of_option(sys.argv, '--port', get_value_of_option(sys.argv, '-p', 'COM7'))
     baud = get_value_of_option(sys.argv, '--baud', get_value_of_option(sys.argv, '-b', '115200'))
-    sourceFile = get_value_of_option(sys.argv, '--file', get_value_of_option(sys.argv, '-f', 'weather-client-'
-                                                                                             'configuration.json'))
+    localFile = get_value_of_option(
+        sys.argv, '--file',
+        get_value_of_option(
+            sys.argv,
+            '-f',
+            'weather-client-configuration.properties'))
+
     reset = contains_option(sys.argv, '--reset')
 
     command = sys.argv[1]
 
     if command == 'create':
-        create_template(sourceFile)
+        create_template(localFile)
     elif command == 'read':
-        print(f'Retrieve configuration \'{sourceFile}\' from {port}...')
-        os.system(f'ampy --port {port} --baud {baud} get configuration {sourceFile}')
+        print(f'Retrieve configuration \'{localFile}\' from {port}...')
+        os.system(f'ampy --port {port} --baud {baud} get configuration {localFile}')
     elif command == 'write':
-        print(f'Deploying configuration \'{sourceFile}\' to {port}...')
-        os.system(f'ampy --port {port} --baud {baud} put {sourceFile} configuration')
+        print(f'Deploying configuration \'{localFile}\' to {port}...')
+        os.system(f'ampy --port {port} --baud {baud} put {localFile} configuration')
 
         if reset:
             os.system(f'ampy --port {port} --baud {baud} reset')

@@ -280,6 +280,5 @@ cython_debug/
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij+all,python,visualstudiocode
 
-weather-client-configuration.json
-/configuration.properties
+/*configuration.properties
 /*.iml
