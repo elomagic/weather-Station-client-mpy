@@ -8,7 +8,7 @@ class MQTTException(Exception):
 
 class MQTTClient:
 
-    def __init__(self, client_id, server, port=0, user=None, password=None, keepalive=0):
+    def __init__(self, client_id: str, server: str, port: int = 0, user: str = None, password: str = None, keepalive=0):
         if port == 0:
             port = 8883
 
@@ -25,7 +25,7 @@ class MQTTClient:
         self.lw_qos = 0
         self.lw_retain = False
 
-    def _send_str(self, s):
+    def _send_str(self, s: str):
         self.sock.write(struct.pack("!H", len(s)))
         self.sock.write(s)
 
@@ -42,7 +42,7 @@ class MQTTClient:
     def set_callback(self, f):
         self.cb = f
 
-    def set_last_will(self, topic, msg, retain=False, qos=0):
+    def set_last_will(self, topic: str, msg: str, retain=False, qos: int = 0):
         assert 0 <= qos <= 2
         assert topic
         self.lw_topic = topic
@@ -50,7 +50,7 @@ class MQTTClient:
         self.lw_qos = qos
         self.lw_retain = retain
 
-    def connect(self, clean_session=True):
+    def connect(self, clean_session: bool = True):
         self.sock = socket.socket()
         self.sock.connect(self.addr)
 
@@ -94,7 +94,7 @@ class MQTTClient:
     def ping(self):
         self.sock.write(b"\xc0\0")
 
-    def publish(self, topic, msg, retain=False, qos=0):
+    def publish(self, topic: str, msg: str, retain: bool = False, qos: int = 0):
         pkt = bytearray(b"\x30\0\0\0")
         pkt[0] |= qos << 1 | retain
         sz = 2 + len(topic) + len(msg)
