@@ -1,5 +1,6 @@
 import client
 import wifi
+import configuration as c
 
 
 def test_post_weather_data():
@@ -9,7 +10,7 @@ def test_post_weather_data():
         'humidity': '68'
     }
 
-    client.post_weather_data("localhost:41883", data)
+    client.post_weather_data(c.get_value(c.SERVER_URL), data)
 
 
 def test():
