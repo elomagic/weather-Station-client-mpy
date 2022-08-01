@@ -18,12 +18,15 @@ def __send_via_mqtt(url: str, data: dict):
     log.debug("Connecting to {} via {} on port {}".format(host, proto, port))
     client = MQTTClient(c.get_value(c.SERVER_APP_KEY), host, port=int(port))
     client.connect()
-    log.debug('Connected to ' + host)
+    try:
+        log.debug('Connected to ' + host)
 
-    client.publish_property(topic_prefix, 'temperature', data)
-    client.publish_property(topic_prefix, 'pressure', data)
-    client.publish_property(topic_prefix, 'humidity', data)
-    client.publish_property(topic_prefix, 'batteryVoltage', data)
+        client.publish_property(topic_prefix, 'temperature', data)
+        client.publish_property(topic_prefix, 'pressure', data)
+        client.publish_property(topic_prefix, 'humidity', data)
+        client.publish_property(topic_prefix, 'batteryVoltage', data)
+    finally:
+        client.disconnect()
 
 
 def __post_via_rest(url: str, data: dict):
