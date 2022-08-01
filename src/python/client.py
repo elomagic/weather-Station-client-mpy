@@ -7,16 +7,23 @@ def __send_via_mqtt(url: str, data: dict):
     import logging as log
 
     # Client-Instanz erzeugen
-    proto, dummy, host, topic_prefix = url.split("/", 3)
-    log.debug("Connecting to " + host)
-    client = MQTTClient(c.get_value(c.SERVER_APP_KEY), host)
-    client.connect()
-    log.debug("Connected to " + host)
+    proto, dummy, host, topic_prefix = url.split('/', 3)
+    if ':' in host:
+        host, port = host.split(':', 1)
+    elif proto == 'mqtts:':
+        port = 8883
+    else:
+        port = 1883
 
-    client.publish_property(topic_prefix, "temperature", data)
-    client.publish_property(topic_prefix, "pressure", data)
-    client.publish_property(topic_prefix, "humidity", data)
-    client.publish_property(topic_prefix, "batteryVoltage", data)
+    log.debug("Connecting to {} via {} on port {}".format(host, proto, port))
+    client = MQTTClient(c.get_value(c.SERVER_APP_KEY), host, port=int(port))
+    client.connect()
+    log.debug('Connected to ' + host)
+
+    client.publish_property(topic_prefix, 'temperature', data)
+    client.publish_property(topic_prefix, 'pressure', data)
+    client.publish_property(topic_prefix, 'humidity', data)
+    client.publish_property(topic_prefix, 'batteryVoltage', data)
 
 
 def __post_via_rest(url: str, data: dict):
