@@ -71,8 +71,13 @@ if contains_option(sys.argv, '--help'):
 else:
     port = get_value_of_option(sys.argv, '--port', get_value_of_option(sys.argv, '-p', 'COM7'))
     baud = get_value_of_option(sys.argv, '--baud', get_value_of_option(sys.argv, '-b', '115200'))
-    sourceFile = get_value_of_option(sys.argv, '--file', get_value_of_option(sys.argv, '-f', 'weather-client-'
-                                                                                             'configuration.json'))
+    sourceFile = get_value_of_option(
+        sys.argv,
+        '--file',
+        get_value_of_option(
+            sys.argv,
+            '-f', 'weather-client-configuration.properties'))
+
     reset = contains_option(sys.argv, '--reset')
 
     command = sys.argv[1]
