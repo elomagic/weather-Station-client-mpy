@@ -4,13 +4,8 @@ import machine
 import exceptions
 import configuration as c
 from sensor import Sensor
-from etime import Time
 from board import BATTERY_MONITOR_PIN
 import logging as log
-
-
-_sensor = None
-_etime = None
 
 
 def deep_sleep(deep_sleep_time_ms: int):
@@ -25,39 +20,28 @@ def deep_sleep(deep_sleep_time_ms: int):
     machine.deepsleep()
 
 
-def setup():
-    from  board import SCL_PIN, SDA_PIN
-    global _etime
-    global _sensor
-
-    log.info("Measure interval every seconds: {}".format(c.get_value(c.SENSOR_MEASURE_INTERVAL)))
-
-    _etime = Time()
-    _etime.init_time_from_ntp()
-    _sensor = Sensor()
-    _sensor.init(SCL_PIN, SDA_PIN)
-
-    log.info('System successful initialized.\n')
-
-
 def measure_and_send():
     import client
     import gc
-    from board import flash_led
-
-    global _etime
-    global _sensor
+    from board import flash_led, SCL_PIN, SDA_PIN
+    from etime import Time
 
     try:
-        current_sensor_data = _sensor.read_sensor()
+        sensor = Sensor()
+        sensor.init(SCL_PIN, SDA_PIN)
 
-        _sensor.print_data(current_sensor_data)
+        time = Time()
+        time.init_time_from_ntp()
+
+        current_sensor_data = sensor.read_sensor()
+
+        sensor.print_data(current_sensor_data)
 
         # Enrich payload
         current_sensor_data['api_version'] = c.APP_API_VER
         current_sensor_data['fw_version'] = c.APP_VER
         current_sensor_data['sensorUid'] = c.get_value(c.SENSOR_UID)
-        current_sensor_data['unixEpochTimestamp'] = _etime.get_local_time()
+        current_sensor_data['unixEpochTimestamp'] = time.get_local_time()
         # 1024 = 1.3 Volt ( 220k / 100k Resistor )
         current_sensor_data['batteryVoltage'] = "{}".format(BATTERY_MONITOR_PIN.read() / 1023 * 1.3)
 
@@ -79,7 +63,6 @@ def start():
         if machine.reset_cause() == machine.DEEPSLEEP_RESET:
             log.info('Woke up from a deep sleep')
 
-        setup()
         measure_and_send()
     except Exception as ex:
         log.error(ex)
