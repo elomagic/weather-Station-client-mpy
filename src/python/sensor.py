@@ -1,41 +1,38 @@
 # myapp.py - tbd.
 
-import driver_bmp280
-import driver_si7021
 import logging as log
 
 
 class Sensor:
 
-    bmp = None
-    si = None
+    i2c = None
+    type = None
 
-    def init(self, scl, sda):
+    def init(self, scl: Pin, sda: Pin):
         from machine import I2C
+        import gc
 
-        log.info('Identifying sensor...')
-        i2c = I2C(scl=scl, sda=sda)
+        log.debug("Mem Alloc: {}".format(gc.mem_alloc()))
+        log.debug("Mem Free: {}".format(gc.mem_free()))
+        gc.collect()
 
-        try:
-            self.bmp = driver_bmp280.BME280(driver_bmp280.BME280_OSAMPLE_1, driver_bmp280.BME280_I2CADDR, i2c)
-            log.info('Sensor BME/BMP280 identified')
+        self.i2c = I2C(scl=scl, sda=sda)
+        log.info('Scanning I2C bus for sensor...')
+        addresses: list[int] = self.i2c.scan()
 
-            return
-        except Exception as ex:
-            log.debug("BMP280 not found or unable to initialize: {}".format(ex))
+        log.info("adresses=%s" % addresses)
 
-        try:
-            self.si = driver_si7021.SI7021(i2c)
-            log.info('Sensor SI7021 identified')
-            return
-        except Exception as ex:
-            log.debug("SI7021 not found or unable to initialize: {}".format(ex))
+        if 0x76 in adresses:
+            type = 0
+        elif 0x40 in addresses:
+            type = 1
 
-        log.info('No sensor identified. Generate some random data for demonstration')
 
     @staticmethod
-    def __read_for_demo():
+    def __read_for_demo() -> dict:
         from random import getrandbits
+
+        log.info('No sensor identified. Generate some random data for demonstration')
 
         return {
             'temperature': 20 + getrandbits(3),
@@ -49,11 +46,22 @@ class Sensor:
             # "altitudeUnit":  = currentSensorData.altitudeUnit;
         }
 
-    def __read_si7021(self):
+    def __read_si7021(self) -> dict:
+        import driver_si7021
+
+        try:
+            log.info('Looking for SI7021...')
+            si = driver_si7021.SI7021(self.i2c)
+            log.info('Sensor SI7021 identified')
+            return
+        except Exception as ex:
+            log.debug("SI7021 not found or unable to initialize: {}".format(ex))
+            return None
+
         log.warn('SI7021 driver not implemented yet.')
         # Get temperature from si7021
-        t = self.si.temperature()
-        h = self.si.humidity()
+        t = si.temperature()
+        h = si.humidity()
 
         return {
             'temperature': t,
@@ -67,8 +75,21 @@ class Sensor:
             # "altitudeUnit":  = currentSensorData.altitudeUnit;
         }
 
-    def __read_bmp280(self):
-        t, p, h = self.bmp.read_compensated_data()
+    def __read_bmp280(self) -> dict:
+        import driver_bmp280
+
+        try:
+            log.info('Looking for BME/BMP280...')
+            bmp = driver_bmp280.BME280(driver_bmp280.BME280_OSAMPLE_1, driver_bmp280.BME280_I2CADDR, self.i2c)
+            log.info('Sensor BME/BMP280 identified')
+
+            return
+        except Exception as ex:
+            log.debug("BMP280 not found or unable to initialize: {}".format(ex))
+            return None
+
+
+        t, p, h = bmp.read_compensated_data()
 
         p = p // 256
         pi = p // 100
@@ -91,15 +112,15 @@ class Sensor:
         return result
 
     def read_sensor(self):
-        if self.bmp is not None:
+        if type == 0:
             return self.__read_bmp280()
-        elif self.si is not None:
+        elif type == 1:
             return self.__read_si7021()
-
-        return self.__read_for_demo()
+        else:
+            return self.__read_for_demo()
 
     @staticmethod
-    def print_data(sensor_data):
+    def print_data(sensor_data: dict):
         log.info("Temperature: {} {}, Heat index: {} {}, Pressure: {} {}, Altitude: {} {}, Humidity: {}%".format(
             sensor_data.get('temperature'), sensor_data.get('temperatureUnit'),
             sensor_data.get('heatIndex'), sensor_data.get('heatIndexUnit'),
