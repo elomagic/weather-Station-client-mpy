@@ -26,6 +26,7 @@ class Time:
             raise exceptions.ReadNtpError
 
     # Returns local time in seconds including timezone offset starting from UNIX epoch (1.1.1970)
+    @staticmethod
     def get_local_time(self):
         import time
 
