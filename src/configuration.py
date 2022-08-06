@@ -72,13 +72,14 @@ def load() -> bool:
     log.info("Reading configuration from '{}'...".format(FILENAME))
     try:
         with open(FILENAME, 'r') as f:
-            _CONFIG = {}
+            reset()
             for line in f.readlines():
                 index = line.find('=')
                 if index != -1:
-                    key = line[:index]
+                    key = line[:index].encode('utf8')
                     value = line[index+1:].rstrip()
-                    set_value(bytes(key), value)
+                    print("Key={}, Value={}".format(key, value))
+                    set_value(key, value)
 
         log.debug("Configuration file '{}' successful loaded".format(FILENAME))
 
