@@ -17,9 +17,6 @@ WIFI_GATEWAY = const(b'wifi.gateway')
 WIFI_DNS = const(b'wifi.dns')
 WIFI_CLIENT_NAME = const(b'wifi.clientName')
 
-APP_VER = const(b'1.0.2-SNAPSHOT')
-APP_API_VER = const(b'1.0.0')
-
 FILENAME = 'configuration'
 
 _DEFAULT_VALUES = {
@@ -72,13 +69,14 @@ def load() -> bool:
     log.info("Reading configuration from '{}'...".format(FILENAME))
     try:
         with open(FILENAME, 'r') as f:
-            _CONFIG = {}
+            reset()
             for line in f.readlines():
                 index = line.find('=')
                 if index != -1:
-                    key = line[:index]
+                    key = line[:index].encode('utf8')
                     value = line[index+1:].rstrip()
-                    set_value(bytes(key), value)
+                    # print("Key={}, Value={}".format(key, value))
+                    set_value(key, value)
 
         log.debug("Configuration file '{}' successful loaded".format(FILENAME))
 
