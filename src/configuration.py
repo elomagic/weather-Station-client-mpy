@@ -75,7 +75,7 @@ def load() -> bool:
                 if index != -1:
                     key = line[:index].encode('utf8')
                     value = line[index+1:].rstrip()
-                    print("Key={}, Value={}".format(key, value))
+                    # print("Key={}, Value={}".format(key, value))
                     set_value(key, value)
 
         log.debug("Configuration file '{}' successful loaded".format(FILENAME))
