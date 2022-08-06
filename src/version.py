@@ -1,0 +1,2 @@
+APP_VER = '1.0.2-SNAPSHOT'
+APP_API_VER = '1.0.0'

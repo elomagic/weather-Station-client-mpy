@@ -44,6 +44,7 @@ def measure_and_send():
     import client
     import gc
     from board import flash_led
+    import version as v
 
     global _etime
     global _sensor
@@ -54,8 +55,8 @@ def measure_and_send():
         _sensor.print_data(current_sensor_data)
 
         # Enrich payload
-        current_sensor_data['api_version'] = c.APP_API_VER
-        current_sensor_data['fw_version'] = c.APP_VER
+        current_sensor_data['api_version'] = v.APP_API_VER
+        current_sensor_data['fw_version'] = v.APP_VER
         current_sensor_data['sensorUid'] = c.get_value(c.SENSOR_UID)
         current_sensor_data['unixEpochTimestamp'] = _etime.get_local_time()
         # 1024 = 1.3 Volt ( 220k / 100k Resistor )

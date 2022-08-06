@@ -17,9 +17,6 @@ WIFI_GATEWAY = const(b'wifi.gateway')
 WIFI_DNS = const(b'wifi.dns')
 WIFI_CLIENT_NAME = const(b'wifi.clientName')
 
-APP_VER = const(b'1.0.2-SNAPSHOT')
-APP_API_VER = const(b'1.0.0')
-
 FILENAME = 'configuration'
 
 _DEFAULT_VALUES = {
