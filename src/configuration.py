@@ -85,7 +85,7 @@ def load() -> bool:
         log.setup(
             get_value(LOGGING_CONSOLE_ENABLED) == '1',
             get_value(LOGGING_FILE_ENABLED) == '1',
-            get_value(LOGGING_LEVEL)
+            bytes(get_value(LOGGING_LEVEL))
         )
 
         return True
