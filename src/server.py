@@ -1,11 +1,12 @@
 
 import logging as log
+from micropython import const
 
-__CONST_HTTP_OK = 'HTTP/1.1 200 OK\r\n'
-__CONST_CONN_CLOSE = 'Connection: close\r\n\r\n'
-__FIX_PASSWORD = 'DoYaThinkIAmAnIdiot?'
+_CONST_HTTP_OK = const(b'HTTP/1.1 200 OK\r\n')
+_CONST_CONN_CLOSE = const(b'Connection: close\r\n\r\n')
+_FIX_PASSWORD = const(b'DoYaThinkIAmAnIdiot?')
 
-__ssids = []
+_ssids = []
 
 
 #def send_response_log(connection):
@@ -24,34 +25,34 @@ __ssids = []
 
 def send_response_not_found(connection):
     log.debug('Send response: 404 Not Found')
-    connection.send('HTTP/1.1 404 Not found\r\n')
-    connection.send('Content-Type: text/html\r\n')
-    connection.sendall(__CONST_CONN_CLOSE)
+    connection.send(const(b'HTTP/1.1 404 Not found\r\n'))
+    connection.send(const(b'Content-Type: text/html\r\n'))
+    connection.sendall(_CONST_CONN_CLOSE)
 
 
 def send_redirect(connection):
     connection.send('HTTP/1.1 303 See Other\r\n')
-    connection.send('Location: /\r\n')
-    connection.sendall(__CONST_CONN_CLOSE)
+    connection.send(const(b'Location: /\r\n'))
+    connection.sendall(_CONST_CONN_CLOSE)
 
 
 def send_response_resource(connection, resource, text=''):
     import configuration as c
-    global __ssids
+    global _ssids
     filename = "/html/{}".format(resource)
 
     if resource.endswith('.html'):
         log.debug("Loading resource '{}'...".format(filename))
 
         access_points = ''
-        for ssid in __ssids:
+        for ssid in _ssids:
             access_points += "<option value=\"{}\">".format(ssid)
 
         with open(filename, 'r') as f:
-            connection.send(__CONST_HTTP_OK)
+            connection.send(_CONST_HTTP_OK)
             connection.send('Content-Type: text/html;charset=utf-8\r\n')
             connection.send('Server: WeatherBot/1.0\r\n')
-            connection.send(__CONST_CONN_CLOSE)
+            connection.send(_CONST_CONN_CLOSE)
 
             for line in f:
                 line = line\
@@ -61,7 +62,7 @@ def send_response_resource(connection, resource, text=''):
 
                 line = line\
                     .replace('{ssid}', c.get_value(c.WIFI_SSID))\
-                    .replace('{password}', __FIX_PASSWORD)\
+                    .replace('{password}', str(_FIX_PASSWORD))\
                     .replace('{address}', c.get_value(c.WIFI_ADDRESS))\
                     .replace('{netmask}', c.get_value(c.WIFI_NETMASK))\
                     .replace('{gateway}', c.get_value(c.WIFI_GATEWAY))\
@@ -99,10 +100,10 @@ def send_response_resource(connection, resource, text=''):
 
         chunk_size = 1024
         with open(filename, 'rb') as f:
-            connection.send(__CONST_HTTP_OK)
+            connection.send(_CONST_HTTP_OK)
             connection.send('Cache-Control: max-age=86400, public\r\n')
             connection.send("Content-Type: {}\r\n".format(mimetypes))
-            connection.send(__CONST_CONN_CLOSE)
+            connection.send(_CONST_CONN_CLOSE)
 
             data = f.read(chunk_size)
             while data:
@@ -159,7 +160,7 @@ def handle_post_configuration(data):
 
     c.set_value(c.WIFI_SSID, get_form_field(form_fields, 'ssid', c.get_value(c.WIFI_SSID)))
     p = get_form_field(form_fields, 'password', c.get_value(c.WIFI_PASSWORD))
-    if p != __FIX_PASSWORD:
+    if p != _FIX_PASSWORD:
         c.set_value(c.WIFI_PASSWORD, p)
     c.set_value(c.WIFI_ADDRESS, get_form_field(form_fields, 'address', c.get_value(c.WIFI_ADDRESS)))
     c.set_value(c.WIFI_NETMASK, get_form_field(form_fields, 'netmask', c.get_value(c.WIFI_NETMASK)))
@@ -178,13 +179,14 @@ def handle_post_configuration(data):
 
 def start_web_server():
     import usocket as socket
+    import gc
     import wifi
     from board import WIFI_CLIENT_MODE_PIN
 
-    global __ssids
+    global _ssids
 
     if WIFI_CLIENT_MODE_PIN.value() == 0:
-        __ssids = wifi.scan_wlan()
+        _ssids = wifi.scan_wlan()
 
     port = 80
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -192,8 +194,7 @@ def start_web_server():
     server.listen(1)
 
     while True:
-        # if gc.mem_free() < 102000:
-        #     gc.collect()
+        gc.collect()
 
         method = None
 
