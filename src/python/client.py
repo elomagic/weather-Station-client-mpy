@@ -2,8 +2,9 @@
 
 import configuration as c
 
-def _send_via_mqtt(url: str, data: dict):
+def _send_via_mqtt(url: str, data: dict) -> None:
     from umqttsimple import MQTTClient
+    from gc import collect
     import logging as log
     from exceptions import UnableToPostError
 
@@ -18,8 +19,8 @@ def _send_via_mqtt(url: str, data: dict):
     else:
         port = '1883'
 
+    collect()
     uid = c.get_value(c.SENSOR_UID)
-
     client = MQTTClient(client_id=uid, server=host, port=int(port))
     try:
         log.debug("Connecting to '{}' with ID '{}'".format(host, uid))
@@ -38,7 +39,7 @@ def _send_via_mqtt(url: str, data: dict):
         raise UnableToPostError
 
 
-def _post_via_rest(url: str, data: dict):
+def _post_via_rest(url: str, data: dict) -> None:
     import ujson
     import erequests as requests
     from exceptions import UnableToPostError
@@ -59,7 +60,7 @@ def _post_via_rest(url: str, data: dict):
         raise UnableToPostError
 
 
-def post_weather_data(data: dict):
+def post_weather_data(data: dict) -> None:
     from wifi import wlan
     from exceptions import WlanNotConnectedError
 
