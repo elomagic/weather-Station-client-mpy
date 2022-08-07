@@ -53,9 +53,9 @@ def start():
     except BaseException as e:
         log.error(e)
         flash_led(6, 2)
-    #except exceptions.BaseError as e:
-    #    log.error(e.message)
-    #    flash_led(e.flashCount, 2)
+    except BaseError as e:
+        log.error(e.message)
+        flash_led(e.flashCount, 2)
     finally:
         deep_sleep_time = int(c.get_value(c.SENSOR_MEASURE_INTERVAL)) * 1000
         deep_sleep(deep_sleep_time)
