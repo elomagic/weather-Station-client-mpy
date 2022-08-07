@@ -2,6 +2,7 @@
 
 import configuration as c
 
+
 def __send_via_mqtt(url: str, data: dict):
     from umqttsimple import MQTTClient
     import logging as log

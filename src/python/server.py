@@ -39,6 +39,7 @@ def send_redirect(connection):
 def send_response_resource(connection, resource, text=''):
     import configuration as c
     global _ssids
+    import version as v
     filename = "/html/{}".format(resource)
 
     if resource.endswith('.html'):
@@ -84,7 +85,7 @@ def send_response_resource(connection, resource, text=''):
 
                 line = line.replace('{access-points}', access_points)
 
-                line = line.replace('{app-ver}', c.APP_VER)
+                line = line.replace('{app-ver}', v.APP_VER)
 
                 connection.send(line)
 
