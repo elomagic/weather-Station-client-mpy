@@ -67,6 +67,9 @@ def build() -> None:
 
     print(f'Freezing Python files...')
     for f in os.listdir(_TARGET_FILES_DIR):
+        if f == 'main.py':
+            continue
+
         if f.endswith('.py'):
             source_file = f'{_TARGET_FILES_DIR}/{f}'
             target_file = f'{source_file[:-3]}.mpy'
