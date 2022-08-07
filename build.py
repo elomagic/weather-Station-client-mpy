@@ -16,7 +16,7 @@ _DIST_DIR = f'{_TARGET_DIR}/dist'
 _TARGET_FILES_DIR = f'{_DIST_DIR}/files'
 
 
-def contains_option(args: [], option: str):
+def contains_option(args: [], option: str) -> bool:
     """Returns true when option in list of args. Otherwise false"""
     return option in args
 
@@ -29,7 +29,7 @@ def get_value_of_option(args: [], option: str, default_value=None) -> str:
     return args[args.index(option) + 1]
 
 
-def deploy():
+def deploy() -> None:
     global _DIST_DIR
 
     print('\n-------- DEPLOY --------')
@@ -37,12 +37,12 @@ def deploy():
     port = get_value_of_option(sys.argv, '--port', get_value_of_option(sys.argv, '-p', 'COM7'))
     baud = get_value_of_option(sys.argv, '--baud', get_value_of_option(sys.argv, '-b', '115200'))
 
-    print(f'Deploying folder  \'{_DIST_DIR}\' to {port}...')
-    if os.system(f'ampy --port {port} --baud {baud} put {_DIST_DIR} ') != 0:
+    print(f'Deploying folder \'{_TARGET_FILES_DIR}\' to {port}...')
+    if os.system(f'ampy --port {port} --baud {baud} put {_TARGET_FILES_DIR} /') != 0:
         raise IOError('Unable to deploy files')
 
 
-def build():
+def build() -> None:
     global _TARGET_DIR
     global _TARGET_FILES_DIR
     global _PROJECT_DIR
@@ -85,9 +85,13 @@ def build():
     shutil.make_archive(target_zip_file, 'zip', _DIST_DIR)
 
 
-build()
+build_switch: bool = contains_option(sys.argv, 'build')
+deploy_switch: bool = contains_option(sys.argv, 'deploy')
 
-if contains_option(sys.argv, 'deploy'):
+if build_switch or not deploy_switch:
+    build()
+
+if deploy_switch or not build_switch:
     deploy()
 
 print('\nBuild script done. Please check results.')
