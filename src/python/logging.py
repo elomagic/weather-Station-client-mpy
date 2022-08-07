@@ -37,7 +37,7 @@ def _write_text(text):
         filename_1 = get_logfile(1)
         try:
             os.remove(filename_1)
-        except Exception as e:
+        except BaseException as e:
             # noop
             pass
 

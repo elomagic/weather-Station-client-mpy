@@ -17,6 +17,7 @@ def _read_for_demo() -> dict:
         # "altitudeUnit":  = currentSensorData.altitudeUnit;
     }
 
+
 def _read_si7021(i2c: I2C) -> dict:
     import driver_si7021
 
@@ -86,7 +87,6 @@ def _print_data(sensor_data: dict):
 
 
 def read_sensor() -> dict:
-    import gc
     import board
 
     i2c = I2C(scl=board.SCL_PIN, sda=board.SDA_PIN)
