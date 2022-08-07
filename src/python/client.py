@@ -1,10 +1,12 @@
 # client.py - HTTP client module to post data to server
 
+import configuration as c
 
 def __send_via_mqtt(url: str, data: dict):
     from umqttsimple import MQTTClient
-    import configuration as c
     import logging as log
+
+    log.info("Sending data to '{}'".format(url))
 
     # Client-Instanz erzeugen
     proto, dummy, host, topic_prefix = url.split('/', 3)
@@ -54,10 +56,12 @@ def __post_via_rest(url: str, data: dict):
         raise UnableToPostError
 
 
-def post_weather_data(url: str, data: dict):
+def post_weather_data(data: dict):
+    url = c.get_value(c.SERVER_URL)
+
     if url.startswith('http:'):
-        __post_via_rest(url, data)
+        __post_via_rest("{}/measure".format(url), data)
     elif url.startswith('mqtt:'):
-        __send_via_mqtt(url, data)
+        __send_via_mqtt(c.get_value(c.SERVER_URL), data)
     else:
         raise ValueError("Unsupported scheme in URL '%s'" % url)
