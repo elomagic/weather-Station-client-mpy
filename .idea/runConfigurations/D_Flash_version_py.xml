@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="D Flash version.py" type="MicroPythonConfigurationType" factoryName="MicroPython" path="D:\projects\weather-station-client-mpy\src\python\version.py">
+    <module name="weather-station-py" />
+    <method v="2" />
+  </configuration>
+</component>
