@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="D Flash client.py" type="MicroPythonConfigurationType" factoryName="MicroPython" path="D:\projects\weather-station-client-mpy\src\client.py">
+  <configuration default="false" name="D Flash client.py" type="MicroPythonConfigurationType" factoryName="MicroPython" path="D:\projects\weather-station-client-mpy\src\python\client.py">
     <module name="weather-station-py" />
     <method v="2" />
   </configuration>
