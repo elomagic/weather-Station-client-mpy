@@ -17,7 +17,7 @@ def deep_sleep(deep_sleep_time_ms: int):
 
 
 def start():
-    from gc import collect
+    import gc
     from exceptions import BaseError
     from board import flash_led, BATTERY_MONITOR_PIN
     from sensor import read_sensor
@@ -43,10 +43,10 @@ def start():
         # 1024 = 1.3 Volt ( 220k / 100k Resistor )
         current_sensor_data['batteryVoltage'] = "{}".format(BATTERY_MONITOR_PIN.read() / 1023 * 1.3)
 
+        # Release unused memory
         log.debug("Collected data: {}".format(current_sensor_data))
 
-        # Release unused memory
-        collect()
+        gc.collect()
 
         post_weather_data(current_sensor_data)
         flash_led(1)
