@@ -1,10 +1,6 @@
 # myapp.py - tbd.
 
 import machine
-import exceptions
-import configuration as c
-from sensor import Sensor
-from board import BATTERY_MONITOR_PIN
 import logging as log
 
 
@@ -20,16 +16,20 @@ def deep_sleep(deep_sleep_time_ms: int):
     machine.deepsleep()
 
 
-def measure_and_send():
-    import client
-    import gc
-    from board import flash_led, SCL_PIN, SDA_PIN
+def start():
+    import sensor
+    import configuration as c
+    from exceptions import BaseError
+    from client import post_weather_data
+    from gc import collect
+    from board import flash_led, BATTERY_MONITOR_PIN
     from etime import Time
     import version as v
 
     try:
-        sensor = Sensor()
-        sensor.init(SCL_PIN, SDA_PIN)
+        # check if the device woke from a deep sleep
+        if machine.reset_cause() == machine.DEEPSLEEP_RESET:
+            log.info('Woke up from a deep sleep')
 
         time = Time()
         time.init_time_from_ntp()
@@ -49,24 +49,13 @@ def measure_and_send():
         url = "{}/measure".format(c.get_value(c.SERVER_URL))
 
         # Release unused memory
-        gc.collect()
+        collect()
 
-        client.post_weather_data(url, current_sensor_data)
+        post_weather_data(url, current_sensor_data)
         flash_led(1)
     except exceptions.BaseError as e:
         flash_led(e.flashCount, 2)
         log.error(e.message)
-
-
-def start():
-    try:
-        # check if the device woke from a deep sleep
-        if machine.reset_cause() == machine.DEEPSLEEP_RESET:
-            log.info('Woke up from a deep sleep')
-
-        measure_and_send()
-    except Exception as ex:
-        log.error(ex)
     finally:
         deep_sleep_time = int(c.get_value(c.SENSOR_MEASURE_INTERVAL)) * 1000
         deep_sleep(deep_sleep_time)
