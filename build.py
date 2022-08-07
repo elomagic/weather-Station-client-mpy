@@ -1,6 +1,6 @@
 import os
 import shutil
-from src.version import APP_VER as VERSION
+from version import APP_VER as VERSION
 
 # I recommend to create a local symbolic link to the mpy-cross from the micropython project
 # Sample: ln -s /Users/carsten/projects/micropython/mpy-cross/mpy-cross mpy-cross
@@ -36,9 +36,7 @@ for f in os.listdir(_TARGET_FILES_DIR):
 shutil.copy(f'{_PROJECT_DIR}/requirements.txt', f'{_DIST_DIR}/requirements.txt')
 shutil.copy(f'{_PROJECT_DIR}/Setup-Client.py', f'{_DIST_DIR}/Setup-Client.txt')
 
-# Package target files
-#version = '0.0.1-SNAPSHOT'
-target_zip_file = f'{_TARGET_DIR}/weather-client-micropython {VERSION}'
+# Package target filestarget_zip_file = f'{_TARGET_DIR}/weather-client-micropython {VERSION}'
 print(f'Creating ZIP distribution file {target_zip_file}.zip...')
 shutil.make_archive(target_zip_file, 'zip', _DIST_DIR)
 print('Build done. Please check results.')
