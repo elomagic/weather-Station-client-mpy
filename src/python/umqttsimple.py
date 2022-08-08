@@ -57,10 +57,7 @@ class MQTTClient:
         self.sock = socket.socket()
         addr = socket.getaddrinfo(self.server, self.port)[0][-1]
         self.sock.connect(addr)
-        if self.ssl:
-            import ussl
 
-            self.sock = ussl.wrap_socket(self.sock, **self.ssl_params)
         premsg = bytearray(b"\x10\0\0\0\0\0")
         msg = bytearray(b"\x04MQTT\x04\x02\0\0")
 
@@ -108,9 +105,6 @@ class MQTTClient:
         self.sock.write(b"\xe0\0")
         self.sock.close()
 
-    def ping(self) -> None:
-        self.sock.write(b"\xc0\0")
-
     def publish(self, topic: str, msg: str, retain=False, qos: int=0) -> None:
         pkt = bytearray(b"\x30\0\0\0")
         pkt[0] |= qos << 1 | retain
@@ -151,25 +145,6 @@ class MQTTClient:
                         return
         elif qos == 2:
             assert 0
-
-    def subscribe(self, topic: str, qos=0) -> None:
-        assert self.cb is not None, "Subscribe callback is not set"
-        pkt = bytearray(b"\x82\0\0\0")
-        self.pid += 1
-        struct.pack_into("!BH", pkt, 1, 2 + 2 + len(topic) + 1, self.pid)
-        # print(hex(len(pkt)), hexlify(pkt, ":"))
-        self.sock.write(pkt)
-        self._send_str(topic)
-        self.sock.write(qos.to_bytes(1, "little"))
-        while 1:
-            op = self.wait_msg()
-            if op == 0x90:
-                resp = self.sock.read(4)
-                # print(resp)
-                assert resp[1] == pkt[2] and resp[2] == pkt[3]
-                if resp[3] == 0x80:
-                    raise MQTTException(resp[3])
-                return
 
     # Wait for a single incoming MQTT message and process it.
     # Subscribed messages are delivered to a callback previously
@@ -214,18 +189,3 @@ class MQTTClient:
             self.sock.write(pkt)
         elif op & 6 == 4:
             assert 0
-
-    # Checks whether a pending message from server is available.
-    # If not, returns immediately with None. Otherwise, does
-    # the same processing as wait_msg.
-    def check_msg(self):
-        self.sock.setblocking(False)
-        return self.wait_msg()
-
-    def publish_property(self, topic_prefix: str, key: str, data: dict) -> None:
-        if data.get(key) is None:
-            return
-
-        value = data[key]
-
-        self.publish("{}/{}".format(topic_prefix, key), value)

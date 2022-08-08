@@ -69,7 +69,7 @@ successful running on your ESP.
 
 Upload the projects files with the following command
 
-* ```ampy --port COM6 --baud 115200 put ./src/python /```
+* ```./build.py --port COM6 --baud 115200 build deploy```
 
 ## Configure Bot
 
@@ -118,7 +118,7 @@ The weather bot support two configuration options.
     .\Setup-Client.py write --port COM7 --file configuration.json
     ```
 
-3. Via Web UI of the weather bot
+2. Via Web UI of the weather bot
     * Power on ESP
     * Connect the ESP via Wi-Fi. Look for the SSID "Weather-Bot". Password is "weather-bot".
     * The configuration page appears. Configure the bot according to your needs.
@@ -178,11 +178,12 @@ Host: weather-server.local
 
 ### MQTT communication
 
-Topic generation rule: ```/[Path of the URL]/[Property Name]```
+Topic generation rule: ```/[Path of the URL]/[Sensor UID][Property Name]```
 
 Examples:
-* ```kitchen/temperature```
-* ```garden/humidity```
+* ```kitchen/892ed1a5-a416-418d-b478-78d7ff744b2e/temperature```
+* ```kitchen/892ed1a5-a416-418d-b478-78d7ff744b2e/humidity```
+* ```garden/17356968-d9cd-4c50-9afd-1a7fb1972a5e/humidity```
 
 
 #### Published measures
