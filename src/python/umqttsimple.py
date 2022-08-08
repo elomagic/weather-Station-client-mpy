@@ -1,5 +1,6 @@
 import usocket as socket
 import ustruct as struct
+from ubinascii import hexlify
 
 
 class MQTTException(Exception):
@@ -7,25 +8,27 @@ class MQTTException(Exception):
 
 
 class MQTTClient:
-
-    def __init__(self, client_id: str, server: str, port: int = 0, user: str = None, password: str = None, keepalive=0):
+    def __init__(self, client_id: str, server: str, port: int=0, user: str=None, password: str=None, keepalive=0, ssl=False, ssl_params={}, ):
         if port == 0:
-            port = 8883
+            port = 8883 if ssl else 1883
 
-        self.client_id = client_id
+        self.client_id: str = client_id
         self.sock = None
-        self.addr = socket.getaddrinfo(server, port)[0][-1]
+        self.server: str = server
+        self.port: int = port
+        self.ssl: bool = ssl
+        self.ssl_params = ssl_params
         self.pid = 0
         self.cb = None
-        self.user = user
-        self.pswd = password
+        self.user: str = user
+        self.pswd: str = password
         self.keepalive = keepalive
-        self.lw_topic = None
-        self.lw_msg = None
+        self.lw_topic: str = None
+        self.lw_msg: str = None
         self.lw_qos = 0
         self.lw_retain = False
 
-    def _send_str(self, s: str):
+    def _send_str(self, s: str) -> None:
         self.sock.write(struct.pack("!H", len(s)))
         self.sock.write(s)
 
@@ -39,10 +42,10 @@ class MQTTClient:
                 return n
             sh += 7
 
-    def set_callback(self, f):
+    def set_callback(self, f) -> None:
         self.cb = f
 
-    def set_last_will(self, topic: str, msg: str, retain=False, qos: int = 0):
+    def set_last_will(self, topic: str, msg: str, retain=False, qos=0) -> None:
         assert 0 <= qos <= 2
         assert topic
         self.lw_topic = topic
@@ -50,27 +53,41 @@ class MQTTClient:
         self.lw_qos = qos
         self.lw_retain = retain
 
-    def connect(self, clean_session: bool = True):
+    def connect(self, clean_session=True):
         self.sock = socket.socket()
-        self.sock.connect(self.addr)
+        addr = socket.getaddrinfo(self.server, self.port)[0][-1]
+        self.sock.connect(addr)
+        if self.ssl:
+            import ussl
 
-        msg = bytearray(b"\x10\0\0\x04MQTT\x04\x02\0\0")
-        msg[1] = 10 + 2 + len(self.client_id)
-        msg[9] = clean_session << 1
+            self.sock = ussl.wrap_socket(self.sock, **self.ssl_params)
+        premsg = bytearray(b"\x10\0\0\0\0\0")
+        msg = bytearray(b"\x04MQTT\x04\x02\0\0")
 
+        sz = 10 + 2 + len(self.client_id)
+        msg[6] = clean_session << 1
         if self.user is not None:
-            msg[1] += 2 + len(self.user) + 2 + len(self.pswd)
-            msg[9] |= 0xC0
+            sz += 2 + len(self.user) + 2 + len(self.pswd)
+            msg[6] |= 0xC0
         if self.keepalive:
             assert self.keepalive < 65536
-            msg[10] |= self.keepalive >> 8
-            msg[11] |= self.keepalive & 0x00FF
+            msg[7] |= self.keepalive >> 8
+            msg[8] |= self.keepalive & 0x00FF
         if self.lw_topic:
-            msg[1] += 2 + len(self.lw_topic) + 2 + len(self.lw_msg)
-            msg[9] |= 0x4 | (self.lw_qos & 0x1) << 3 | (self.lw_qos & 0x2) << 3
-            msg[9] |= self.lw_retain << 5
+            sz += 2 + len(self.lw_topic) + 2 + len(self.lw_msg)
+            msg[6] |= 0x4 | (self.lw_qos & 0x1) << 3 | (self.lw_qos & 0x2) << 3
+            msg[6] |= self.lw_retain << 5
 
+        i = 1
+        while sz > 0x7F:
+            premsg[i] = (sz & 0x7F) | 0x80
+            sz >>= 7
+            i += 1
+        premsg[i] = sz
+
+        self.sock.write(premsg, i + 2)
         self.sock.write(msg)
+        # print(hex(len(msg)), hexlify(msg, ":"))
         self._send_str(self.client_id)
 
         if self.lw_topic:
@@ -87,14 +104,14 @@ class MQTTClient:
             raise MQTTException(resp[3])
         return resp[2] & 1
 
-    def disconnect(self):
+    def disconnect(self) -> None:
         self.sock.write(b"\xe0\0")
         self.sock.close()
 
-    def ping(self):
+    def ping(self) -> None:
         self.sock.write(b"\xc0\0")
 
-    def publish(self, topic: str, msg: str, retain: bool = False, qos: int = 0):
+    def publish(self, topic: str, msg: str, retain=False, qos: int=0) -> None:
         pkt = bytearray(b"\x30\0\0\0")
         pkt[0] |= qos << 1 | retain
         sz = 2 + len(topic) + len(msg)
@@ -105,12 +122,12 @@ class MQTTClient:
         assert sz < 2097152
 
         i = 1
-        while sz > 0x7f:
-            pkt[i] = (sz & 0x7f) | 0x80
+        while sz > 0x7F:
+            pkt[i] = (sz & 0x7F) | 0x80
             sz >>= 7
             i += 1
         pkt[i] = sz
-
+        # print(hex(len(pkt)), hexlify(pkt, ":"))
         self.sock.write(pkt, i + 1)
         self._send_str(topic)
 
@@ -135,6 +152,25 @@ class MQTTClient:
         elif qos == 2:
             assert 0
 
+    def subscribe(self, topic: str, qos=0) -> None:
+        assert self.cb is not None, "Subscribe callback is not set"
+        pkt = bytearray(b"\x82\0\0\0")
+        self.pid += 1
+        struct.pack_into("!BH", pkt, 1, 2 + 2 + len(topic) + 1, self.pid)
+        # print(hex(len(pkt)), hexlify(pkt, ":"))
+        self.sock.write(pkt)
+        self._send_str(topic)
+        self.sock.write(qos.to_bytes(1, "little"))
+        while 1:
+            op = self.wait_msg()
+            if op == 0x90:
+                resp = self.sock.read(4)
+                # print(resp)
+                assert resp[1] == pkt[2] and resp[2] == pkt[3]
+                if resp[3] == 0x80:
+                    raise MQTTException(resp[3])
+                return
+
     # Wait for a single incoming MQTT message and process it.
     # Subscribed messages are delivered to a callback previously
     # set by .set_callback() method. Other (internal) MQTT
@@ -149,13 +185,13 @@ class MQTTClient:
         if res == b"":
             raise OSError(-1)
 
-        if res == b"\xd0":  # PING RESP
+        if res == b"\xd0":  # PINGRESP
             sz = self.sock.read(1)[0]
             assert sz == 0
             return None
 
         op = res[0]
-        if op & 0xf0 != 0x30:
+        if op & 0xF0 != 0x30:
             return op
 
         sz = self._recv_len()
@@ -186,7 +222,7 @@ class MQTTClient:
         self.sock.setblocking(False)
         return self.wait_msg()
 
-    def publish_property(self, topic_prefix: str, key: str, data: dict):
+    def publish_property(self, topic_prefix: str, key: str, data: dict) -> None:
         if data.get(key) is None:
             return
 
