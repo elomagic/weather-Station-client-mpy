@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 import os
 import sys
@@ -112,9 +112,18 @@ def deploy() -> None:
     port = get_value_of_option(sys.argv, '--port', get_value_of_option(sys.argv, '-p', 'COM7'))
     baud = get_value_of_option(sys.argv, '--baud', get_value_of_option(sys.argv, '-b', '115200'))
 
+    root = _TARGET_FILES_DIR
     print(f'Deploying folder \'{_TARGET_FILES_DIR}\' to {port}...')
-    if os.system(f'ampy --port {port} --baud {baud} put {_TARGET_FILES_DIR} /') != 0:
-        raise IOError('Unable to deploy files')
+    for current_dir, subdirs, files in os.walk(_TARGET_FILES_DIR):
+        # Map source root to target folder
+        target_dir = f'/{current_dir[len(root)+1:]}'
+
+        for file in files:
+            source_file = os.path.join(current_dir, file)
+            target_file = os.path.join(target_dir, file)
+            print(f'\tDeploying file \'{source_file}\' to \'{target_file}\'...')
+            if os.system(f'ampy --port {port} --baud {baud} put {source_file} {target_file}') != 0:
+                raise IOError('Unable to deploy files')
 
     print('Done.')
 
