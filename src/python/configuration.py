@@ -42,7 +42,7 @@ _DEFAULT_VALUES = {
 _CONFIG = {}
 
 
-def reset():
+def reset() -> None:
     global _CONFIG
     _CONFIG = {}
 
@@ -56,7 +56,7 @@ def get_value(key: bytes) -> str:
     return _DEFAULT_VALUES[key]
 
 
-def set_value(key: bytes, value: str):
+def set_value(key: bytes, value: str) -> None:
     global _CONFIG
     import logging as log
     log.debug("Setting '{}' with value '{}'".format(key, value))
@@ -92,7 +92,7 @@ def load() -> bool:
         return False
 
 
-def write():
+def write() -> None:
     import logging as log
     global _CONFIG
     with open(FILENAME, 'w') as f:
@@ -101,7 +101,7 @@ def write():
             f.write("{}={}\n".format(key, value))
 
 
-def print_config():
+def print_config() -> None:
     import logging as log
     global _CONFIG
 

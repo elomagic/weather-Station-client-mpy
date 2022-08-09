@@ -4,7 +4,7 @@ import machine
 import logging as log
 import configuration as c
 
-def deep_sleep(deep_sleep_time_ms: int):
+def deep_sleep(deep_sleep_time_ms: int) -> None:
     log.info("Going into deep sleep for {} seconds.".format(c.get_value(c.SENSOR_MEASURE_INTERVAL)))
 
     # Configure RTC.ALARM0 to be able to wake the device
@@ -16,7 +16,7 @@ def deep_sleep(deep_sleep_time_ms: int):
     machine.deepsleep()
 
 
-def start():
+def start() -> None:
     import gc
     from exceptions import BaseError
     from board import flash_led, BATTERY_MONITOR_PIN

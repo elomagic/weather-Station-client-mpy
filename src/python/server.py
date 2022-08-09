@@ -23,20 +23,20 @@ _ssids = []
 #    log.debug('Log file responded')
 
 
-def send_response_not_found(connection):
+def send_response_not_found(connection) -> None:
     log.debug('Send response: 404 Not Found')
     connection.send(const(b'HTTP/1.1 404 Not found\r\n'))
     connection.send(const(b'Content-Type: text/html\r\n'))
     connection.sendall(_CONST_CONN_CLOSE)
 
 
-def send_redirect(connection):
+def send_redirect(connection) -> None:
     connection.send('HTTP/1.1 303 See Other\r\n')
     connection.send(const(b'Location: /\r\n'))
     connection.sendall(_CONST_CONN_CLOSE)
 
 
-def send_response_resource(connection, resource, text=''):
+def send_response_resource(connection, resource: str, text: str='') -> None:
     import configuration as c
     global _ssids
     import version as v
@@ -128,7 +128,7 @@ def url_decode(data: bytearray) -> str:
     return res.decode('utf-8')
 
 
-def get_form_fields(body) -> {}:
+def get_form_fields(body: str) -> {}:
     result = {}
     fields = body.replace(b'+', b'%20').split(b'&')
     for field in fields:
@@ -138,7 +138,7 @@ def get_form_fields(body) -> {}:
     return result
 
 
-def get_form_field(form_data, key, default_value):
+def get_form_field(form_data, key: str, default_value):
     if key in form_data:
         value = form_data[key]
         log.debug("Return value '{}' for key '{}'".format(value, key))
@@ -148,7 +148,7 @@ def get_form_field(form_data, key, default_value):
     return default_value
 
 
-def handle_post_configuration(data):
+def handle_post_configuration(data) -> None:
     import configuration as c
     form_fields = get_form_fields(data)
 
@@ -178,7 +178,7 @@ def handle_post_configuration(data):
     c.write()
 
 
-def start_web_server():
+def start_web_server() -> None:
     import usocket as socket
     import gc
     import wifi

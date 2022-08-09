@@ -17,11 +17,11 @@ _logging_console_enabled: bool = True
 _logging_file_enabled: bool = False
 
 
-def _print_text(text):
+def _print_text(text) -> None:
     print(text)
 
 
-def _write_text(text):
+def _write_text(text) -> None:
     import os
 
     filename_0 = get_logfile(0)
@@ -59,7 +59,7 @@ def _can_log(level: bytes) -> bool:
     return vlevel <= vclevel
 
 
-def _log(level: bytes, text: str):
+def _log(level: bytes, text: str) -> None:
     global _logging_file_enabled
     global _logging_console_enabled
 
@@ -70,7 +70,7 @@ def _log(level: bytes, text: str):
             _write_text(text)
 
 
-def setup(console_logging: bool, file_logging: bool, min_log_level: bytes):
+def setup(console_logging: bool, file_logging: bool, min_log_level: bytes) -> None:
     global _logging_level
     global _logging_file_enabled
     global _logging_console_enabled
@@ -86,21 +86,21 @@ def get_logfile(index: int) -> str:
     return _FILENAME.format(index)
 
 
-def debug(text):
+def debug(text) -> None:
     _log(LEVEL_DEBUG, "DEBUG {}".format(text))
 
 
-def info(text):
+def info(text) -> None:
     _log(LEVEL_INFO, "INFO  {}".format(text))
 
 
-def warn(text):
+def warn(text) -> None:
     _log(LEVEL_WARN, "WARN  {}".format(text))
 
 
-def error(text):
+def error(text) -> None:
     _log(LEVEL_ERROR, "ERROR {}".format(text))
 
 
-def all_event(text):
+def all_event(text) -> None:
     _log(LEVEL_ALL, "-     {}".format(text))

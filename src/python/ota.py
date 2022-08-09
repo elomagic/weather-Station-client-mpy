@@ -37,7 +37,7 @@ def __remove_folder(folder: str) -> bool:
     return skip
 
 
-def __copy_file(source: str, target: str):
+def __copy_file(source: str, target: str) -> None:
     log.warn("Copying file from '{}' to '{}'".format(source, target))
     with open(source, 'rb') as s:
         with open(target, 'wb') as t:
@@ -47,7 +47,7 @@ def __copy_file(source: str, target: str):
                 t.write(buf)
 
 
-def __copy_folder(folder: str):
+def __copy_folder(folder: str) -> None:
     for file in os.ilistdir(folder):
         name = file[0]
         t = file[1]
@@ -62,7 +62,7 @@ def __copy_folder(folder: str):
             log.warn("Ignoring file {}".format(name))
 
 
-def __create_folder(path: [str]):
+def __create_folder(path: [str]) -> None:
     log.debug("Creating path '{}'".format(path))
     os.chdir('/')
     for folder in path:
@@ -123,7 +123,7 @@ def __download_list() -> [str]:
         raise
 
 
-def update(crc: str = "demo"):
+def update(crc: str = "demo") -> None:
     wifi.start_client()
 
     # Clean update folder except the README.md
@@ -147,7 +147,7 @@ def update(crc: str = "demo"):
     log.warn('Download successful. Continue with "upgrade()".')
 
 
-def upgrade():
+def upgrade() -> None:
 
     wifi.start_client()
     # Remove all files except file "ota.py" and folder "logs" and update".

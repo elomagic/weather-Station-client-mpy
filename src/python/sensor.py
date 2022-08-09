@@ -76,7 +76,7 @@ def _read_bmp280(i2c: I2C) -> dict:
     return result
 
 
-def _print_data(sensor_data: dict):
+def _print_data(sensor_data: dict) -> None:
     log.info("Temperature: {} {}, Heat index: {} {}, Pressure: {} {}, Altitude: {} {}, Humidity: {}%".format(
         sensor_data.get('temperature'), sensor_data.get('temperatureUnit'),
         sensor_data.get('heatIndex'), sensor_data.get('heatIndexUnit'),

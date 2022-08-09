@@ -3,7 +3,7 @@
 import logging as log
 
 
-def init_time_from_ntp():
+def init_time_from_ntp() -> None:
     """Sync internal RTC with public NTP server"""
     import ntptime
     import exceptions

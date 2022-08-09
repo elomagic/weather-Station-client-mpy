@@ -4,7 +4,7 @@ import logging as log
 wlan = None
 
 
-def start_client():
+def start_client() -> None:
     import configuration as c
     import network
     import ubinascii
@@ -31,7 +31,7 @@ def start_client():
     log.info("Network settings: {}".format(wlan.ifconfig()))
 
 
-def start_ap():
+def start_ap() -> None:
     import configuration as c
     import network
     import gc
@@ -61,7 +61,7 @@ def start_ap():
     log.debug("Ifconfig={}".format(wlan.ifconfig()))
 
 
-def init(config_exists: bool = False):
+def init(config_exists: bool=False) -> None:
     from board import WIFI_CLIENT_MODE_PIN
 
     log.debug("wifi_client_mode_pin={}".format(WIFI_CLIENT_MODE_PIN.value()))
@@ -73,7 +73,7 @@ def init(config_exists: bool = False):
         start_ap()
 
 
-def scan_wlan():
+def scan_wlan() -> [str]:
     import network
 
     log.info('Scanning WLAN...')

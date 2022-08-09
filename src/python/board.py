@@ -20,7 +20,7 @@ WIFI_CLIENT_MODE_PIN = Pin(13, mode=Pin.IN, pull=Pin.PULL_UP)
 BATTERY_MONITOR_PIN = ADC(0)
 
 
-def flash_led(count=1, speed=1):
+def flash_led(count: int=1, speed: int=1) -> None:
     for i in range(abs(count)):
         LED_BOARD.off()
         time.sleep(0.5 * speed)
