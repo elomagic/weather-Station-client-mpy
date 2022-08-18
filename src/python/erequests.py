@@ -125,7 +125,7 @@ def __request(method: str, url: str, json=None) -> Response:
         if status != 300:
             break
 
-    log.debug("Responses HTTP code {}, reason={}".format(status, reason))
+    log.info("Responses HTTP code {}, reason={}".format(status, reason))
 
     if status == 401:
         raise AuthenticationFailed()
