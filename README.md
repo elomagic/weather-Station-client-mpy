@@ -27,7 +27,8 @@
 
 This project is a part of my "small" DIY project about to build up a weather station mesh.
 
-This part deals with the weather client, which measures temperature, air pressure and humidity and transmits them to any REST server.
+This part deals with the weather client, which measures temperature, air pressure and humidity and transmits them to 
+any REST server or MQTT broker.
 
 The part with the REST server is described in another project. See here ... TODO
 
