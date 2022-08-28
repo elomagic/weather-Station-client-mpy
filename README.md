@@ -70,59 +70,68 @@ successful running on your ESP.
 
 Upload the projects files with the following command
 
-* ```./build.py --port COM6 --baud 115200 build deploy```
+```./build.py --port COM6 --baud 115200 build deploy```
 
 ## Configure Bot
 
 The weather bot support two configuration options.
 
-1. Via pushing configuration file by using USB connection
+### Option A - Via console by using USB connection 
 
-    **Configuration file**
-    
-    ```properties
-    # SSID of the access point
-    wifi.ssid=ssid
-    # Password of the access point
-    wifi.password=changeit
-    # IP address of this client when access point doesn't provide dynamically IP address. Usually empty
-    wifi.address=
-    # Usually empty (By default 255.255.255.0)
-    wifi.netmask=255.255.255.0
-    # Usually empty
-    wifi.gateway=
-    # Usually empty (By default 8.8.8.8)
-    wifi.dns=8.8.8.8
-    # Name of client bot (By default 'Weather-Bot')
-    wifi.clientName=[BOT_NAME]
-    
-    # Unique identifier of this client ( Looking for a generator. See https://www.uuidgenerator.net/version4 )
-    sensor.uid=uuid
-    # Measure interval in seconds (By default 300 seconds)
-    sensor.measureInterval=300
-    
-    # REST or MQTT URL server address.  Sample "http://192.168.150.2/rest" or "mqtt://192.168.150.2/kitchen"       
-    server.url=http://[HOSTNAME]/rest
-    # Application key to authentication
-    server.appKey=
-   
-    # Debug level  (By default debug)
-    logging.level=debug
-    # Controls logging output to the console (By default enabled, 1 = Enabled, 0 = Disabled)
-    logging.console.enabled=1
-    # Controls logging output to file on the ESP (By default disabled, 1 = Enabled, 0 = Disabled)
-    logging.file.enabled=0
-    ```
+**Configuration file**
 
-    **Command to write configuration to ESP**
-    ```powershell 
-    .\Setup-Client.py write --port COM7 --file configuration.json
-    ```
+```properties
+# SSID of the access point
+wifi.ssid=ssid
+# Password of the access point
+wifi.password=changeit
+# IP address of this client when access point doesn't provide dynamically IP address. Usually empty
+wifi.address=
+# Usually empty (By default 255.255.255.0)
+wifi.netmask=255.255.255.0
+# Usually empty
+wifi.gateway=
+# Usually empty (By default 8.8.8.8)
+wifi.dns=8.8.8.8
+# Name of client bot (By default 'Weather-Bot')
+wifi.clientName=[BOT_NAME]
 
-2. Via Web UI of the weather bot
-    * Power on ESP
-    * Connect the ESP via Wi-Fi. Look for the SSID "Weather-Bot". Password is "weather-bot".
-    * The configuration page appears. Configure the bot according to your needs.
+# Unique identifier of this client ( Looking for a generator. See https://www.uuidgenerator.net/version4 )
+sensor.uid=uuid
+# Measure interval in seconds (By default 300 seconds)
+sensor.measureInterval=300
+
+# REST or MQTT URL server address.  Sample "http://192.168.150.2/rest" or "mqtt://192.168.150.2/kitchen"       
+server.url=http://[HOSTNAME]/rest
+# Application key to authentication
+server.appKey=
+
+# Debug level  (By default debug)
+logging.level=debug
+# Controls logging output to the console (By default enabled, 1 = Enabled, 0 = Disabled)
+logging.console.enabled=1
+# Controls logging output to file on the ESP (By default disabled, 1 = Enabled, 0 = Disabled)
+logging.file.enabled=0
+```
+
+**Command to read configuration from ESP**
+```
+.\Setup-Client.py read --port COM7 --file configuration.properties
+```
+
+**Command to write configuration to ESP**
+```powershell 
+.\Setup-Client.py write --port COM7 --file configuration.properties
+```
+
+**Note**:
+The commands work most reliably if you execute them shortly after a bot reset!
+
+### Option B - Via Web UI of the weather bot
+
+* Power on ESP
+* Connect the ESP via Wi-Fi. Look for the SSID "Weather-Bot". Password is "weather-bot".
+* The configuration page appears. Configure the bot according to your needs.
 
 ## LED Codes
 
